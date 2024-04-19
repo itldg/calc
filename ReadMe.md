@@ -19,6 +19,8 @@
 -   `Delete` 清空
 -   `Backspace` 退格
 -   `Enter` 或 `=` 计算
+-   `Ctrl + S` 保存窗口
+-   `Ctrl + O` 加载窗口
 -   `Ctrl + C` 复制
 -   `Ctrl + V` 粘贴
 -   `↑` 切换上一个进制

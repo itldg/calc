@@ -33,8 +33,29 @@ namespace Calc
         /// </summary>
         public event Action<FrmCalc> CalcActivate;
 
+        /// <summary>
+        /// 保存所有计算器窗口
+        /// </summary>
+        public event Action SaveAllCalcWindow;
 
+        /// <summary>
+        /// 加载所有计算器窗口
+        /// </summary>
+        public event Action LoadAllCalcWindow;
+
+        /// <summary>
+        /// 当前模式
+        /// </summary>
         public CalcMode Mode { get; set; } = CalcMode.Hex;
+        uint _CurrValue = 0;
+        /// <summary>
+        /// 当前值
+        /// </summary>
+        public uint CurrValue
+        {
+            get { return _CurrValue; }
+            set { _CurrValue = value; ShowNewValue(); }
+        }
 
         Label lblNum = new Label();
         /// <summary>
@@ -50,7 +71,7 @@ namespace Calc
         string beforeValueStr = "";
         uint beforeValue = 0;
 
-        uint currValue = 0;
+
 
         public char CalcCommand { get; set; } = ' ';
         char[] allowCommands = new char[] { '+', '-', '*', '/', '%', '&', '|', '^', '~', '>', '<' };
@@ -103,7 +124,7 @@ namespace Calc
                 BackColor = colorBg;
             };
         }
-        void SetMode(CalcMode mode)
+        public void SetMode(CalcMode mode)
         {
             pHighHex.Visible = pHighDec.Visible = pHighBin.Visible = false;
             Mode = mode;
@@ -132,6 +153,14 @@ namespace Calc
             if (e.KeyChar == (char)Keys.Escape)
             {
                 Close();
+            }
+            else if (e.KeyChar == 19)
+            {
+                SaveAllCalcWindow?.Invoke();
+            }
+            else if (e.KeyChar == 15)
+            {
+                LoadAllCalcWindow?.Invoke();
             }
             else if (e.KeyChar == 'N' || e.KeyChar == 'n')
             {
@@ -253,8 +282,7 @@ namespace Calc
             {
                 lblNum.Text += num;
             }
-            currValue = Convert.ToUInt32(NoSymbolNum, Mode == CalcMode.Hex ? 16 : Mode == CalcMode.Dec ? 10 : 2);
-            ShowNewValue();
+            CurrValue = Convert.ToUInt32(NoSymbolNum, Mode == CalcMode.Hex ? 16 : Mode == CalcMode.Dec ? 10 : 2);
         }
         /// <summary>
         /// 删除最后一个数字
@@ -264,13 +292,11 @@ namespace Calc
             if (lblNum.Text.Length > 1)
             {
                 lblNum.Text = lblNum.Text.Substring(0, lblNum.Text.Length - 1);
-                currValue = Convert.ToUInt32(NoSymbolNum, Mode == CalcMode.Hex ? 16 : Mode == CalcMode.Dec ? 10 : 2);
-                ShowNewValue();
+                CurrValue = Convert.ToUInt32(NoSymbolNum, Mode == CalcMode.Hex ? 16 : Mode == CalcMode.Dec ? 10 : 2);
             }
             else
             {
-                currValue = 0;
-                ShowNewValue();
+                CurrValue = 0;
             }
         }
         /// <summary>
@@ -282,15 +308,15 @@ namespace Calc
         /// </summary>
         void ShowNewValue()
         {
-            string hexValue = currValue.ToString("X");
+            string hexValue = _CurrValue.ToString("X");
             if (hexValue.Length > 1)
             {
                 hexValue = hexValue.TrimStart(trimChar);
             }
             lblHex.Text = StringSplit(hexValue, 4);
 
-            lblDec.Text = StringSplit(currValue.ToString(), 3, ",");
-            lblBin.Text = StringSplit(Convert.ToString(currValue, 2), 4);
+            lblDec.Text = StringSplit(_CurrValue.ToString(), 3, ",");
+            lblBin.Text = StringSplit(Convert.ToString(_CurrValue, 2), 4);
         }
         /// <summary>
         /// 每隔一定长度分割字符串
@@ -318,7 +344,7 @@ namespace Calc
         {
             //计算之前的式子
             Calc();
-            beforeValue = currValue;
+            beforeValue = CurrValue;
             beforeValueStr = lblNum.Text;
             lblCalc.Text = beforeValueStr + " " + command;
             CalcCommand = command;
@@ -337,44 +363,43 @@ namespace Calc
             switch (CalcCommand)
             {
                 case '+':
-                    currValue = beforeValue + currValue;
+                    CurrValue = beforeValue + CurrValue;
                     break;
                 case '-':
-                    currValue = beforeValue - currValue;
+                    CurrValue = beforeValue - CurrValue;
                     break;
                 case '*':
-                    currValue = beforeValue * currValue;
+                    CurrValue = beforeValue * CurrValue;
                     break;
                 case '/':
-                    currValue = beforeValue / currValue;
+                    CurrValue = beforeValue / CurrValue;
                     break;
                 case '%':
-                    currValue = beforeValue % currValue;
+                    CurrValue = beforeValue % CurrValue;
                     break;
                 case '&':
-                    currValue = beforeValue & currValue;
+                    CurrValue = beforeValue & CurrValue;
                     break;
                 case '|':
-                    currValue = beforeValue | currValue;
+                    CurrValue = beforeValue | CurrValue;
                     break;
                 case '^':
-                    currValue = beforeValue ^ currValue;
+                    CurrValue = beforeValue ^ CurrValue;
                     break;
                 case '~':
-                    currValue = ~currValue;
+                    CurrValue = ~CurrValue;
                     break;
                 case '>':
-                    currValue = beforeValue >> (int)currValue;
+                    CurrValue = beforeValue >> (int)CurrValue;
                     break;
                 case '<':
-                    currValue = beforeValue << (int)currValue;
+                    CurrValue = beforeValue << (int)CurrValue;
                     break;
                 default:
                     break;
             }
             beforeValueStr = "";
             lblCalc.Text = "";
-            ShowNewValue();
         }
         private void lblModeHex_Click(object sender, EventArgs e)
         {
@@ -395,8 +420,7 @@ namespace Calc
         {
             if (e.KeyCode == Keys.Delete)
             {
-                currValue = 0;
-                ShowNewValue();
+                CurrValue = 0;
             }
             else if (e.KeyCode == Keys.Up)
             {
