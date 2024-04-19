@@ -13,6 +13,7 @@ using static Calc.FrmCalc;
 
 namespace Calc
 {
+
     public partial class FrmCalc : Form
     {
         /// <summary>
@@ -23,7 +24,16 @@ namespace Calc
         /// 展示所有的计算器窗口
         /// </summary>
         public event Action ShowAllCalc;
-        
+        /// <summary>
+        /// 切换下一个计算器窗口
+        /// </summary>
+        public event Action NextCalc;
+        /// <summary>
+        /// 窗口被激活
+        /// </summary>
+        public event Action<FrmCalc> CalcActivate;
+
+
         public CalcMode Mode { get; set; } = CalcMode.Hex;
 
         Label lblNum = new Label();
@@ -82,11 +92,16 @@ namespace Calc
                 SendMessage(Handle, 0x00A1, 2, 0);
             }
         }
-
+        Color colorBg;
         public FrmCalc()
         {
             InitializeComponent();
             SetMode(CalcMode.Hex);
+            colorBg = BackColor;
+            LostFocus += (s, e) =>
+            {
+                BackColor = colorBg;
+            };
         }
         void SetMode(CalcMode mode)
         {
@@ -125,6 +140,10 @@ namespace Calc
             else if (e.KeyChar == 'S' || e.KeyChar == 's')
             {
                 ShowAllCalc?.Invoke();
+            }
+            else if (e.KeyChar == '\t')
+            {
+                NextCalc?.Invoke();
             }
             else if (e.KeyChar == 3)
             {
@@ -418,6 +437,12 @@ namespace Calc
         private void lblModeHex_MouseMove(object sender, MouseEventArgs e)
         {
             MoveWindow(e);
+        }
+
+        private void FrmCalc_Activated(object sender, EventArgs e)
+        {
+            BackColor = Color.FromArgb(185, 209, 234);
+            CalcActivate?.Invoke(this);
         }
     }
 }

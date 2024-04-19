@@ -42,9 +42,12 @@ namespace Calc
                 AddCalcWindow(calc.Left, calc.Top + 5 + calc.Height);
             };
             calc.ShowAllCalc += ShowAllCalc;
+            calc.NextCalc += NextCalc;
+            calc.CalcActivate += CalcActivate;
             calc.Show();
             calc.Left = left;
             calc.Top = top;
+            lastIndex = listCalc.Count - 1;
             Debug.WriteLine("[" + listCalc.Count + "]Calc window added");
         }
         void ShowAllCalc()
@@ -52,6 +55,27 @@ namespace Calc
             foreach (var calc in listCalc)
             {
                 calc.Activate();
+            }
+        }
+        int lastIndex = 0;
+        void NextCalc()
+        {
+            if (listCalc.Count > lastIndex + 1)
+            {
+                lastIndex++;
+            }
+            else
+            {
+                lastIndex = 0;
+            }
+            listCalc[lastIndex].Activate();
+        }
+        void CalcActivate(FrmCalc frm)
+        {
+            int index = listCalc.IndexOf(frm);
+            if (index != -1)
+            {
+                lastIndex = index;
             }
         }
     }

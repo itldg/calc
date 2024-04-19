@@ -206,6 +206,7 @@
             this.Name = "FrmCalc";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "老大哥计算器";
+            this.Activated += new System.EventHandler(this.FrmCalc_Activated);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.FrmCalc_KeyPress);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.FrmCalc_KeyUp);
             this.ResumeLayout(false);
