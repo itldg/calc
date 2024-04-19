@@ -139,6 +139,10 @@ namespace Calc
                     NumKeyPress(item);
                 }
             }
+            else if (e.KeyChar == '\b')
+            {
+                DeleteNumer();
+            }
             else if (e.KeyChar == '\r' || e.KeyChar == '=')
             {
                 Calc();
