@@ -41,10 +41,18 @@ namespace Calc
             {
                 AddCalcWindow(calc.Left, calc.Top + 5 + calc.Height);
             };
+            calc.ShowAllCalc += ShowAllCalc;
             calc.Show();
             calc.Left = left;
             calc.Top = top;
             Debug.WriteLine("[" + listCalc.Count + "]Calc window added");
+        }
+        void ShowAllCalc()
+        {
+            foreach (var calc in listCalc)
+            {
+                calc.Activate();
+            }
         }
     }
 }

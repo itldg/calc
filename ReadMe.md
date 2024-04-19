@@ -14,6 +14,7 @@
 
 -   `ESC` 退出
 -   `N` 或 `n` 新窗口
+-   `S` 或 `s` 显示所有窗口
 -   `Delete` 清空
 -   `Backspace` 退格
 -   `Enter` 或 `=` 计算

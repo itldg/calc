@@ -19,6 +19,11 @@ namespace Calc
         /// 创建一个新的计算器窗口
         /// </summary>
         public event Action NewCalcWindow;
+        /// <summary>
+        /// 展示所有的计算器窗口
+        /// </summary>
+        public event Action ShowAllCalc;
+        
         public CalcMode Mode { get; set; } = CalcMode.Hex;
 
         Label lblNum = new Label();
@@ -116,6 +121,10 @@ namespace Calc
             else if (e.KeyChar == 'N' || e.KeyChar == 'n')
             {
                 NewCalcWindow?.Invoke();
+            }
+            else if (e.KeyChar == 'S' || e.KeyChar == 's')
+            {
+                ShowAllCalc?.Invoke();
             }
             else if (e.KeyChar == 3)
             {
