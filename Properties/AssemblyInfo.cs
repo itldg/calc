@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("Calc")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("老大哥计算器")]
+[assembly: AssemblyDescription("简易计算器 - 去掉键盘,仅保留数字显示区域,占用更小的空间")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("IT老大哥")]
 [assembly: AssemblyProduct("Calc")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2024")]
+[assembly: AssemblyCopyright("Copyright © IT老大哥 2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
