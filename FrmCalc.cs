@@ -12,7 +12,7 @@ namespace Calc
         /// <summary>
         /// 创建一个新的计算器窗口
         /// </summary>
-        public event Action NewCalcWindow;
+        public event Action<bool> NewCalcWindow;
         /// <summary>
         /// 展示所有的计算器窗口
         /// </summary>
@@ -35,6 +35,11 @@ namespace Calc
         /// 加载所有计算器窗口
         /// </summary>
         public event Action LoadAllCalcWindow;
+
+        /// <summary>
+        /// 关闭所有计算器窗口
+        /// </summary>
+        public event Action CloseAllCalcWindow;
 
         /// <summary>
         /// 当前模式
@@ -152,27 +157,35 @@ namespace Calc
             {
                 Close();
             }
-            else if (e.KeyChar == 19)
+            else if (e.KeyChar == 7) //Ctrl + G
+            {
+                CloseAllCalcWindow?.Invoke();
+            }
+            else if (e.KeyChar == 19) //Ctrl + S
             {
                 SaveAllCalcWindow?.Invoke();
             }
-            else if (e.KeyChar == 15)
+            else if (e.KeyChar == 15) //Ctrl + O
             {
                 LoadAllCalcWindow?.Invoke();
             }
             else if (e.KeyChar == 'N' || e.KeyChar == 'n')
             {
-                NewCalcWindow?.Invoke();
+                NewCalcWindow?.Invoke(true);
+            }
+            else if (e.KeyChar == 14) //Ctrl + N
+            {
+                NewCalcWindow?.Invoke(false);
             }
             else if (e.KeyChar == 'S' || e.KeyChar == 's')
             {
                 ShowAllCalc?.Invoke();
             }
-            else if (e.KeyChar == '\t')
+            else if (e.KeyChar == '\t') //Tab
             {
                 NextCalc?.Invoke();
             }
-            else if (e.KeyChar == 3)
+            else if (e.KeyChar == 3) //Ctrl + C
             {
                 //复制
                 try
@@ -184,7 +197,7 @@ namespace Calc
                     MessageBox.Show(ex.Message, "复制失败");
                 }
             }
-            else if (e.KeyChar == 22)
+            else if (e.KeyChar == 22) //Ctrl + V
             {
                 //粘贴
                 lblNum.Text = "";
@@ -194,7 +207,7 @@ namespace Calc
                     NumKeyPress(item);
                 }
             }
-            else if (e.KeyChar == '\b')
+            else if (e.KeyChar == '\b') //Backspace
             {
                 DeleteNumer();
             }

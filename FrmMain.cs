@@ -31,15 +31,26 @@ namespace Calc
                     Close();
                 }
             };
-            calc.NewCalcWindow += () =>
+            calc.NewCalcWindow += (bool vertical) =>
             {
-                AddCalcWindow(calc.Left, calc.Top + 5 + calc.Height);
+                if (vertical)
+                {
+                    int maxTop = SystemInformation.PrimaryMonitorSize.Height - calc.Height;
+                    AddCalcWindow(calc.Left, Math.Min(calc.Top + 5 + calc.Height, maxTop));
+                }
+                else
+                {
+                    int maxLeft = SystemInformation.PrimaryMonitorSize.Width - calc.Width;
+                    AddCalcWindow(Math.Min(calc.Left + 5 + calc.Width, maxLeft), calc.Top);
+                }
+
             };
             calc.ShowAllCalc += ShowAllCalc;
             calc.NextCalc += NextCalc;
             calc.CalcActivate += CalcActivate;
             calc.SaveAllCalcWindow += SaveAllCalcWindow;
             calc.LoadAllCalcWindow += LoadAllCalcWindow;
+            calc.CloseAllCalcWindow += Calc_CloseAllCalcWindow;
             calc.Show();
             if (left >= 0)
             {
@@ -52,6 +63,16 @@ namespace Calc
             lastIndex = listCalc.Count - 1;
             Debug.WriteLine("[" + listCalc.Count + "]Calc window added");
         }
+
+        private void Calc_CloseAllCalcWindow()
+        {
+            for (int i = listCalc.Count - 1; i >= 0; i--)
+            {
+                listCalc[i].Close();
+            }
+            Close();
+        }
+
         /// <summary>
         /// 显示所有计算器窗口
         /// </summary>
