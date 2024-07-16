@@ -151,7 +151,7 @@ namespace Calc
             }
         }
         void ShowHelp()
-        { 
+        {
             //获取程序名称和版本号
             string title = Application.ProductName + " " + Application.ProductVersion;
             MessageBox.Show("=====快捷键=====\r\n-   `ESC` 退出\r\n-   `N` 或 `n` 垂直新建窗口\r\n-   `S` 或 `s` 显示所有窗口\r\n-   `Tab` 切换到下一个窗口\r\n-   `Delete` 清空\r\n-   `Backspace` 退格\r\n-   `Enter` 或 `=` 计算\r\n-   `Ctrl + N` 水平新建窗口\r\n-   `Ctrl + S` 保存窗口\r\n-   `Ctrl + O` 加载窗口\r\n-   `Ctrl + G` 关闭所有窗口\r\n-   `Ctrl + C` 复制\r\n-   `Ctrl + V` 粘贴\r\n-   `↑` 切换上一个进制\r\n-   `↓` 切换下一个进制\r\n\r\n=====运算符=====\r\n-   `+` 加\r\n-   `-` 减\r\n-   `*` 乘\r\n-   `/` 除\r\n-   `%` 取余\r\n-   `&` 与\r\n-   `|` 或\r\n-   `^` 异或\r\n-   `~` 取反\r\n-   `<` 左移\r\n-   `>` 右移", title, MessageBoxButtons.OK, MessageBoxIcon.None);
@@ -366,7 +366,7 @@ namespace Calc
             Calc();
             beforeValue = CurrValue;
             beforeValueStr = lblNum.Text;
-            lblCalc.Text = beforeValueStr + " " + command;
+            lblCalc.Text = beforeValueStr + " " + command.ToString().Replace("&", "&&");
             CalcCommand = command;
         }
         /// <summary>
