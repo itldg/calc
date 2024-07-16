@@ -222,8 +222,10 @@ namespace Calc
             }
             else if (e.KeyChar == '\r' || e.KeyChar == '=')
             {
-                Calc();
-                CalcCommand = ' ';
+                if (Calc())
+                {
+                    CalcCommand = ' ';
+                }
             }
             else if (allowCommands.Contains(e.KeyChar))
             {
@@ -372,13 +374,13 @@ namespace Calc
         /// <summary>
         /// 计算当前的值
         /// </summary>
-        void Calc()
+        bool Calc()
         {
-            resetValue = true;
             if (CalcCommand == ' ')
             {
+                resetValue = true;
                 //没有在计算
-                return;
+                return true;
             }
             switch (CalcCommand)
             {
@@ -392,6 +394,11 @@ namespace Calc
                     CurrValue = beforeValue * CurrValue;
                     break;
                 case '/':
+                    if (CurrValue == 0)
+                    {
+                        MessageBox.Show("除数不能为0");
+                        return false;
+                    }
                     CurrValue = beforeValue / CurrValue;
                     break;
                 case '%':
@@ -418,8 +425,10 @@ namespace Calc
                 default:
                     break;
             }
+            resetValue = true;
             beforeValueStr = "";
             lblCalc.Text = "";
+            return true;
         }
         private void lblModeHex_Click(object sender, EventArgs e)
         {
